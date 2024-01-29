@@ -1,0 +1,12 @@
+device:
+  id: 0x72 # 0x71	ADI-2 DAC	    0x72	ADI-2 Pro	    0x73	ADI-2/4 Pro SE	
+  midi_port_out: 1
+  midi_port_in: 0
+  server:
+    port: 3333
+    disable: false
+sync:
+  interval: 10 #Seconds #status messages
+  rgb:
+    enabled: false #default false
+    refreshRate: 500 #milliseconds
