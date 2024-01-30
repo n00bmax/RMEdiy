@@ -38,14 +38,16 @@ func StartTUI() {
 	MainFlex = tview.NewFlex().SetDirection(tview.FlexColumn).
 		AddItem(PrepareDeviceLayout(), 0, 3, false).
 		AddItem(PrepareDeviceLayoutRight(), 0, 3, false).
-		AddItem(GenerateChannelLayouts(), 0, 5, false).
+		AddItem(GenerateChannelLayouts(), 0, 4, false).
 		AddItem(PrepareEQLayoutVolume(app), 42, 1, false).
 		AddItem(prepResizeButton(), 3, 1, false).
 		AddItem(tView, 0, 2, false)
 
-	footer := tview.NewTextView().SetText(config.Name + "\t\tLast Update: ").SetTextColor(tview.Styles.PrimaryTextColor)
+	footer := tview.NewTextView().SetText(config.Name + "\t\tLast Update: ")
+	footer.SetDynamicColors(true)
+
 	footer.SetDrawFunc(func(screen tcell.Screen, x, y, width, height int) (int, int, int, int) {
-		footer.SetText(fmt.Sprintf("%v \t\t Last Update: %v\t\t Last Change: %v", config.Name, lastUpdate.Format("Monday, 02-Jan-06 10:04:05PM"), lastChange.Format("10:04:05PM")))
+		footer.SetText(fmt.Sprintf("[green]%v \t\t [darkcyan]Last Update:[blue] %v\t\t [darkcyan]Last Change: [purple]%v", config.Name, lastUpdate.Format("Monday, 02-Jan-06 10:04:05PM"), lastChange.Format("10:04:05PM")))
 		return x, y, width, height
 	})
 	TUIMain := tview.NewFlex().
@@ -92,7 +94,7 @@ func GenerateChannelLayouts() *tview.Flex {
 
 	for i, channel := range []int{3, 6, 9} {
 		pages.AddPage(strconv.Itoa(i), PrepareChannelLayout(channel), true, channel == 3)
-		fmt.Fprintf(info, `%d ["%d"][darkcyan]%s[white][""]  `, i+1, i, channelNameMap[channel])
+		fmt.Fprintf(info, `%d ["%d"][%s]%s[white][""]  `, i+1, i, channelColorMap[channel], channelNameMap[channel])
 	}
 	info.Highlight("1")
 	return tview.NewFlex().
@@ -100,4 +102,11 @@ func GenerateChannelLayouts() *tview.Flex {
 		AddItem(info, 1, 1, false).
 		AddItem(pages, 0, 1, true)
 
+}
+
+var channelColorMap = map[int]string{
+	1: "red",
+	3: "green",
+	6: "blue",
+	9: "purple",
 }

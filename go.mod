@@ -1,4 +1,4 @@
-module rmediy
+module RMEdiy
 
 go 1.21.4
 

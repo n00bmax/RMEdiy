@@ -41,7 +41,7 @@ func PrepareDeviceLayout() *tview.Flex {
 }
 
 func prepSyncRGBButton() *tview.Checkbox {
-	rgbBt := tview.NewCheckbox().SetLabel("RGB Sync")
+	rgbBt := tview.NewCheckbox().SetLabel("Meter Color Sync")
 	SyncRGB()
 	rgbBt.SetChangedFunc(func(checked bool) {
 		if checked {

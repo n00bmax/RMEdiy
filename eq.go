@@ -6,13 +6,12 @@ import (
 	"github.com/gdamore/tcell/v2"
 	"github.com/navidys/tvxwidgets"
 	"github.com/rivo/tview"
-	"k8s.io/klog/v2"
 )
 
 var colorMap = map[int]tcell.Color{
 	4:  tcell.ColorGreen,
 	7:  tcell.ColorBlue,
-	10: tcell.ColorOrange,
+	10: tcell.ColorPurple,
 }
 
 func PrepareEQLayout(app *tview.Application, channel int) *tview.Flex {
@@ -21,7 +20,7 @@ func PrepareEQLayout(app *tview.Application, channel int) *tview.Flex {
 
 	eq1.SetBorder(true)
 	eq1.SetTitle(channelNameMap[channel-1] + " EQ")
-	eq1.SetDataTitleColor(tcell.ColorDarkOrange)
+	eq1.SetDataTitleColor(tcell.ColorPurple)
 	eq1.SetLineColor(colorMap[channel])
 
 	update := func() {
@@ -37,7 +36,6 @@ func PrepareEQLayout(app *tview.Application, channel int) *tview.Flex {
 					scaleFactors := []float64{float64(mapRange(float64(val), -12, 12, 0, 10)), mapRange(float64(status[channel][7]), -12, 12, 0, 10), mapRange(float64(status[channel][10]), -12, 12, 0, 10), mapRange(float64(status[channel][13]), -12, 12, 0, 10), mapRange(float64(status[channel][17]), -12, 12, 0, 10)} // Adjust these scale values as needed
 
 					_, yValues := generateContinuousCurve(givenNumbers, scaleFactors)
-					klog.Info(yValues)
 
 					eq1.SetData(yValues)
 

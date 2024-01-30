@@ -11,8 +11,8 @@ import (
 func addFormItemsToMap(app *tview.Application) {
 
 	gauge := tvxwidgets.NewActivityModeGauge()
-	gauge.SetTitle("RMEote Control")
-	gauge.SetPgBgColor(tcell.ColorOrange)
+	gauge.SetTitle("[blue]RME[purple]ote Control")
+	gauge.SetPgBgColor(tcell.ColorDarkCyan)
 	gauge.SetRect(10, 4, 50, 3)
 	gauge.SetBorder(true)
 
