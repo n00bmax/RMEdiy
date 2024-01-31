@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -27,6 +28,7 @@ func RmediyStatus(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	w.Write(jData)
 }
 func RmediySet(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+
 	c, err := strconv.Atoi(ps.ByName("channel"))
 	if err != nil {
 		klog.Error(err)
@@ -41,6 +43,16 @@ func RmediySet(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	if err != nil {
 		klog.Error(err)
 		return
+	}
+	opt, found := Parameters[c][p]
+	if found {
+		if v < len(opt.Options) {
+			fmt.Fprintf(w, "Succesfully sent %v request to device. Set to %v", Parameters[c][p].Name, Parameters[c][p].Options[v])
+		} else {
+			fmt.Fprintf(w, "Succesfully sent %v request to device. Set to %v", Parameters[c][p].Name, v)
+		}
+	} else {
+		fmt.Fprint(w, "Attempting to send undefined command")
 	}
 	SendCommand(c, p, v)
 
