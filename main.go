@@ -29,7 +29,7 @@ func main() {
 	if !config.Rmediator.Disabled {
 		initRmediator()
 	}
-
+	StartTUI()
 }
 
 func initRmediy() {
@@ -50,8 +50,6 @@ func initRmediy() {
 		klog.Exit()
 	} else {
 		initKlog()
-
-		StartTUI()
 	}
 }
 

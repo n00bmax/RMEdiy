@@ -26,6 +26,25 @@ func RmediyStatus(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	}
 	w.Write(jData)
 }
+func RmediySet(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	c, err := strconv.Atoi(ps.ByName("channel"))
+	if err != nil {
+		klog.Error(err)
+		return
+	}
+	p, err := strconv.Atoi(ps.ByName("param"))
+	if err != nil {
+		klog.Error(err)
+		return
+	}
+	v, err := strconv.Atoi(ps.ByName("value"))
+	if err != nil {
+		klog.Error(err)
+		return
+	}
+	SendCommand(c, p, v)
+
+}
 
 func RmediySettings(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	setting := ps.ByName("setting")
@@ -50,6 +69,7 @@ func initRmediator() {
 	router.GET("/status", RmediyStatus)
 	router.GET("/metercolor/:color", RmediyColor)
 	router.GET("/settings/:setting", RmediySettings)
+	router.POST("/set/:channel/:param/:value", RmediySet)
 
 	klog.Info("RMEdiator serving requests at ", config.Rmediator.Port)
 	go http.ListenAndServe(":"+config.Rmediator.Port, router)
