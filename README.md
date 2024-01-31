@@ -11,7 +11,7 @@ It seems to handle high refresh rates quite well(video playback)
 
 Please note this is highly experimental. Lots of things could be made better but I wanted to get things working first.
 
-![](./static/example2.png)
+![](./static/example.png)
 ## Usage
 #### Run
 [Download](https://github.com/n00bmax/RMEdiy/releases) the latest version for your arch  
