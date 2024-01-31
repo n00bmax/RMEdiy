@@ -1,4 +1,4 @@
-module  github.com/n00bmax/RMEdiy
+module github.com/n00bmax/RMEdiy
 
 go 1.21.4
 

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"time"
 
 	"gitlab.com/gomidi/midi/v2"
@@ -77,13 +78,13 @@ type RMESysExMessage struct {
 
 var CurrentDeviceStatusMap = map[int]map[int]int{}
 
-func GetRMEStatus() {
+func GetRMEStatus() error {
 	send, err := midi.SendTo(out)
 	if err != nil {
-		klog.Infof("ERROR: %s\n", err)
-		return
+		return fmt.Errorf("ERROR: %s\n", err)
 	}
 	send(generateSysexStatusRequest())
+	return nil
 }
 func SetCurrentStatusMap(vals map[int]map[int]int) {
 	klog.V(3).Info(vals)

@@ -25,7 +25,7 @@ func setSysexBase() {
 func SysExListener() {
 	in, err := midi.InPort(config.InPort)
 	if err != nil {
-		klog.Exit(err)
+		klog.Error(err)
 	}
 	_, err = midi.ListenTo(in, func(msg midi.Message, timestampms int32) {
 		var bt []byte

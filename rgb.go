@@ -91,7 +91,7 @@ func SyncRGB() {
 			x, y, width, height := 200, 200, 200, 200 // Adjust these coordinates and dimensions as needed
 			img, err := captureScreenArea(x, y, width, height)
 			if err != nil {
-				klog.Fatal(err)
+				klog.Error(err)
 				continue
 			}
 

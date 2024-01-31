@@ -2,6 +2,9 @@ package main
 
 import (
 	"flag"
+	"fmt"
+	"os"
+	"time"
 
 	"gitlab.com/gomidi/midi/v2"
 	_ "gitlab.com/gomidi/midi/v2/drivers/rtmididrv" // autoregisters driver
@@ -22,12 +25,11 @@ func initADIDevice() {
 func main() {
 	klog.Info("out ports: \n" + midi.GetOutPorts().String())
 	klog.Info("in ports: \n" + midi.GetInPorts().String())
-	initKlog()
 	initRmediy()
 	if !config.Rmediator.Disabled {
 		initRmediator()
 	}
-	StartTUI()
+
 }
 
 func initRmediy() {
@@ -41,10 +43,23 @@ func initRmediy() {
 
 	go SysExListener()
 
-	GetRMEStatus()
+	if GetRMEStatus() != nil {
+		fmt.Print("error starting rmediy")
+
+		time.Sleep(10 * time.Second)
+		klog.Exit()
+	} else {
+		initKlog()
+
+		StartTUI()
+	}
 }
 
 func init() {
-	getConfig()
+	if err := getConfig(); err != nil {
+		fmt.Print(err)
+		time.Sleep(20 * time.Second)
+		os.Exit(0)
+	}
 	out, _ = midi.OutPort(config.ADI.OutPort)
 }

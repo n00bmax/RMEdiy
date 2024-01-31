@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"os"
 
 	"gitlab.com/gomidi/midi/v2/drivers"
@@ -43,20 +43,20 @@ type Config struct {
 	} `yaml:"sync"`
 }
 
-func getConfig() {
+func getConfig() error {
 	yamlFile, err := os.ReadFile("config.yaml")
 	if err != nil {
-		log.Fatalf("Failed to read the YAML file: %v", err)
+		return fmt.Errorf("Failed to read the YAML file: %v", err)
 	}
 
 	err = yaml.Unmarshal(yamlFile, &config)
 	if err != nil {
-		log.Fatalf("Failed to unmarshal YAML content: %v", err)
+		return fmt.Errorf("Failed to unmarshal YAML content: %v", err)
 	}
 
 	dev, found := ADIDevices[config.ID]
 	if !found {
-		klog.Exitf("invalid device id: %v; must be one of %v[%v],%v[%v],%v[%v]", config.ID, ADI2DAC, ADIDevices[ADI2DAC], ADI2Pro, ADIDevices[ADI2Pro], ADI24, ADIDevices[ADI24])
+		return fmt.Errorf("invalid device id: %v; must be one of %v[%v],%v[%v],%v[%v]", config.ID, ADI2DAC, ADIDevices[ADI2DAC], ADI2Pro, ADIDevices[ADI2Pro], ADI24, ADIDevices[ADI24])
 
 	}
 	switch config.ID {
@@ -69,4 +69,5 @@ func getConfig() {
 	klog.Info("Sync Interval:", config.Sync.Interval)
 	klog.Info("RGB Enabled:", config.Sync.RGB.Enabled)
 	klog.Info("RGB Refresh Rate:", config.Sync.RGB.RefreshRate)
+	return nil
 }
