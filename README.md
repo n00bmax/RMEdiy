@@ -35,6 +35,16 @@ Assumes the config file is in the current directory
 
 ## Config
 
+Get the MIDI Port by running `aplaymidi --list`
+
+```
+ Port    Client name                      Port name
+ 14:0    Midi Through                     Midi Through Port-0
+ 28:0    ADI-2 DAC (51080054)             ADI-2 DAC (51080054) Port 1
+```
+Set `midi_port_out` and `midi_port_in` to 1 according to this config into `config.yaml.
+
+
 Modify the _config.yaml_ file as necessary
 
 ```yaml
