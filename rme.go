@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sync"
 	"time"
 
 	"gitlab.com/gomidi/midi/v2"
@@ -78,6 +79,14 @@ type RMESysExMessage struct {
 
 var CurrentDeviceStatusMap = map[int]map[int]int{}
 
+// statusMu guards all reads and writes of CurrentDeviceStatusMap. It is
+// written concurrently from SysExListener's per-message goroutines
+// (SetCurrentStatusMap) and from the TUI callbacks (tui_gen.go), and read
+// from the TUI update loops and the RMEdiator HTTP handlers (rmediator.go) --
+// without this lock these accesses race and crash the process with
+// "fatal error: concurrent map writes".
+var statusMu sync.RWMutex
+
 func GetRMEStatus() error {
 	send, err := midi.SendTo(out)
 	if err != nil {
@@ -89,6 +98,8 @@ func GetRMEStatus() error {
 func SetCurrentStatusMap(vals map[int]map[int]int) {
 	klog.V(3).Info(vals)
 	change := false
+	statusMu.Lock()
+	defer statusMu.Unlock()
 	for i, p := range vals {
 		for k, v := range p {
 			if k == 0 {
