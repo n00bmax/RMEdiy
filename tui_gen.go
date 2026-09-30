@@ -28,7 +28,9 @@ func addFormItemsToMap(app *tview.Application) {
 						parameter := parameter
 						msgCh := StatusBroker.Subscribe()
 						for status := range msgCh {
+							statusMu.RLock()
 							val, ok := status[channel][parameter.Index]
+							statusMu.RUnlock()
 							if ok && cb.GetText() != strconv.Itoa(val) {
 								app.QueueUpdate(func() {
 									IsStatusUpdate = true
@@ -45,10 +47,10 @@ func addFormItemsToMap(app *tview.Application) {
 							return
 						}
 						parameter := parameter
-						app.RWMutex.Lock()
 						val, _ := strconv.Atoi(text)
+						statusMu.Lock()
 						CurrentDeviceStatusMap[channel][parameter.Index] = val
-						app.RWMutex.Unlock()
+						statusMu.Unlock()
 
 						SendCommand(channel, parameter.Index, val)
 					})
@@ -66,9 +68,9 @@ func addFormItemsToMap(app *tview.Application) {
 						if checked {
 							itemIndex = 1
 						}
-						app.RWMutex.Lock()
+						statusMu.Lock()
 						CurrentDeviceStatusMap[channel][parameter.Index] = itemIndex
-						app.RWMutex.Unlock()
+						statusMu.Unlock()
 
 						SendCommand(channel, parameter.Index, itemIndex)
 					})
@@ -77,7 +79,9 @@ func addFormItemsToMap(app *tview.Application) {
 						msgCh := StatusBroker.Subscribe()
 
 						for status := range msgCh {
+							statusMu.RLock()
 							val, ok := status[channel][parameter.Index]
+							statusMu.RUnlock()
 							if ok {
 								app.QueueUpdate(func() {
 									checked := false
@@ -104,9 +108,9 @@ func addFormItemsToMap(app *tview.Application) {
 						return
 					}
 					parameter := parameter
-					app.RWMutex.Lock()
+					statusMu.Lock()
 					CurrentDeviceStatusMap[channel][parameter.Index] = index
-					app.RWMutex.Unlock()
+					statusMu.Unlock()
 
 					SendCommand(channel, parameter.Index, index)
 
@@ -115,7 +119,9 @@ func addFormItemsToMap(app *tview.Application) {
 					parameter := parameter
 					msgCh := StatusBroker.Subscribe()
 					for status := range msgCh {
+						statusMu.RLock()
 						val, ok := status[channel][parameter.Index]
+						statusMu.RUnlock()
 						if ok {
 							app.QueueUpdate(func() {
 								IsStatusUpdate = true

@@ -63,12 +63,16 @@ func RmediySettings(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 	jData := []byte{}
 	var err error
 	if setting == "all" {
+		statusMu.RLock()
 		jData, err = json.Marshal(CurrentDeviceStatusMap)
+		statusMu.RUnlock()
 		if err != nil {
 			// handle error
 		}
 	} else if setting, err := strconv.Atoi(setting); err == nil {
+		statusMu.RLock()
 		jData, err = json.Marshal(CurrentDeviceStatusMap[setting])
+		statusMu.RUnlock()
 		if err != nil {
 			// handle error
 		}
